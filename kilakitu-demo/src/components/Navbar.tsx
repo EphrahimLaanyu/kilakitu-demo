@@ -1,76 +1,147 @@
-import { Search, ShoppingCart, ChevronDown } from "lucide-react";
+"use client";
+
+import { useState, useEffect } from "react";
+import { Search, ShoppingBag, Menu, X, User, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Add a subtle shadow when scrolling down to separate from content
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isMobileMenuOpen]);
+
   return (
-    <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-50">
-      {/* Top White Section */}
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-24 gap-8">
-          
-          {/* Logo - Retained original colors but refined proportions */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-2.5 group">
-            <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center border border-red-200 group-hover:border-red-300 transition-colors">
-              <ShoppingCart className="text-red-600 w-4 h-4 stroke-[2]" />
-            </div>
-            <span className="font-bold text-2xl text-red-600 tracking-tight">
-              kilakitu
-              <span className="text-[11px] text-yellow-500 font-bold tracking-widest ml-0.5">.co.ke</span>
-            </span>
-          </Link>
-
-          {/* Search Bar - Flattened and sharpened for a premium feel */}
-          <div className="flex-1 max-w-2xl flex items-center border border-gray-300 rounded-sm overflow-hidden focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 transition-all">
-            <button className="flex items-center px-4 py-3 bg-gray-50 text-[11px] font-bold tracking-widest text-gray-500 uppercase border-r border-gray-300 hover:bg-gray-100 transition-colors">
-              Categories <ChevronDown className="ml-2 w-3 h-3" />
-            </button>
-            <div className="relative flex-1 bg-white">
-              <input
-                type="text"
-                placeholder="Search Product..."
-                className="w-full px-5 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none bg-transparent"
-              />
-            </div>
-            <button className="px-6 py-3 bg-gray-50 hover:bg-gray-100 transition-colors border-l border-gray-300 flex items-center justify-center">
-              <Search className="w-4 h-4 text-gray-600 stroke-[2]" />
-            </button>
-          </div>
-
-          {/* Cart - Retained red accent but modernized the typography */}
-          <div className="flex items-center flex-shrink-0">
-            <button className="flex items-center gap-2.5 text-gray-900 hover:text-red-600 transition-colors group">
-              <div className="relative">
-                <ShoppingCart className="w-5 h-5 text-red-700 stroke-[1.5]" />
-                <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
-                  0
-                </span>
-              </div>
-              <span className="text-xs font-bold tracking-widest uppercase">Cart</span>
-            </button>
-          </div>
-          
-        </div>
+    <>
+      {/* Ultra-thin, sophisticated Promo Bar */}
+      <div className="bg-[#2A0C11] text-[#F5E6E8] text-center py-2 text-[9px] font-bold tracking-[0.2em] uppercase w-full relative z-[60]">
+        Complimentary priority shipping on all commercial orders
       </div>
 
-      {/* Maroon Navigation Bar - Kept original color, upgraded typography */}
-      <div className="bg-[#6B242C]">
+      <header 
+        className={`w-full sticky top-0 z-50 transition-all duration-500 ${
+          isScrolled 
+            ? "bg-white/70 backdrop-blur-xl border-b border-gray-200/50 shadow-[0_4px_30px_rgba(0,0,0,0.03)]" 
+            : "bg-white border-b border-transparent"
+        }`}
+      >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-10">
-            <Link href="#" className="text-white/90 hover:text-white py-3.5 text-[10px] font-bold tracking-widest uppercase transition-colors border-b-2 border-transparent hover:border-white">
-              Tech Products
-            </Link>
-            <Link href="#" className="text-white/70 hover:text-white py-3.5 text-[10px] font-bold tracking-widest uppercase transition-colors border-b-2 border-transparent hover:border-white">
-              Market Place
-            </Link>
-            <Link href="#" className="text-white/70 hover:text-white py-3.5 text-[10px] font-bold tracking-widest uppercase transition-colors border-b-2 border-transparent hover:border-white">
-              China Market
-            </Link>
-            <Link href="#" className="text-white/70 hover:text-white py-3.5 text-[10px] font-bold tracking-widest uppercase transition-colors border-b-2 border-transparent hover:border-white">
-              Blog
-            </Link>
+          <div className="flex justify-between items-center h-20">
+            
+            {/* MOBILE: Hamburger */}
+            <div className="flex-1 md:hidden flex items-center">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 -ml-2 text-gray-900 focus:outline-none"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-5 h-5 stroke-[1.5]" />
+                ) : (
+                  <Menu className="w-5 h-5 stroke-[1.5]" />
+                )}
+              </button>
+            </div>
+
+            {/* LOGO: Sleek, high-contrast typography */}
+            <div className="flex-1 md:flex-none flex justify-center md:justify-start z-50">
+              <Link href="/" className="flex items-baseline">
+                <span className="text-2xl font-extrabold text-gray-900 tracking-tighter">
+                  kilakitu
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7A1F2D] ml-0.5 mb-1"></span>
+              </Link>
+            </div>
+
+            {/* DESKTOP: Centered Navigation */}
+            <nav className="hidden md:flex flex-1 justify-center space-x-12">
+              {['Tech Products', 'Market Place', 'China Market', 'Journal'].map((item) => (
+                <Link 
+                  key={item} 
+                  href="#" 
+                  className="text-[10px] font-bold tracking-[0.15em] text-gray-500 uppercase hover:text-gray-900 transition-colors relative group py-2"
+                >
+                  {item}
+                  {/* Chic underline hover effect */}
+                  <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#7A1F2D] transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+              ))}
+            </nav>
+
+            {/* UTILITIES: Icons with minimalist styling */}
+            <div className="flex-1 flex items-center justify-end gap-5 sm:gap-6 z-50">
+              <button className="text-gray-900 hover:text-gray-500 transition-colors hidden sm:block">
+                <Search className="w-4 h-4 stroke-[1.5]" />
+              </button>
+              
+              <button className="text-gray-900 hover:text-gray-500 transition-colors hidden sm:block">
+                <User className="w-4 h-4 stroke-[1.5]" />
+              </button>
+
+              <button className="flex items-center gap-1.5 text-gray-900 hover:text-[#7A1F2D] transition-colors group relative">
+                <ShoppingBag className="w-4 h-4 stroke-[1.5]" />
+                <span className="text-[10px] font-bold tracking-widest">(0)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* MOBILE: Full-screen Glassy Menu Overlay */}
+      <div 
+        className={`fixed inset-0 z-40 bg-white/95 backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
+        }`}
+        style={{ paddingTop: '120px' }} // Accounts for header height
+      >
+        <div className="px-6 flex flex-col h-full">
+          {/* Mobile Search */}
+          <div className="flex items-center bg-gray-50 rounded-full px-5 py-4 border border-gray-100 mb-10">
+            <Search className="w-4 h-4 text-gray-400 mr-3" />
+            <input
+              type="text"
+              placeholder="Search kilakitu..."
+              className="bg-transparent border-none outline-none text-sm w-full placeholder-gray-400 text-gray-900"
+            />
+          </div>
+
+          {/* Huge, Editorial Mobile Links */}
+          <nav className="flex flex-col gap-6">
+            {['Tech Products', 'Market Place', 'China Market', 'Journal'].map((item) => (
+              <Link 
+                key={item} 
+                href="#" 
+                className="text-3xl font-medium tracking-tight text-gray-900 flex items-center justify-between group"
+              >
+                {item}
+                <ArrowRight className="w-6 h-6 text-gray-300 group-hover:text-[#7A1F2D] group-hover:translate-x-2 transition-all duration-300" />
+              </Link>
+            ))}
           </nav>
+
+          {/* Mobile Footer Links */}
+          <div className="mt-auto pb-12 flex flex-col gap-6 border-t border-gray-200/50 pt-8">
+            <button className="flex items-center gap-3 text-xs font-bold tracking-[0.15em] text-gray-500 uppercase">
+              <User className="w-4 h-4 stroke-[1.5]" />
+              Sign In / Register
+            </button>
+          </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }
